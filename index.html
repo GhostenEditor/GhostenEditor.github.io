@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--
+      If you are serving your web app in a path other than the root, change the
+      href value below to reflect the base path you are serving from.
+
+      The path provided below has to start and end with a slash "/" in order for
+      it to work correctly.
+
+      For more details:
+      * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+      This is a placeholder for base href that will be replaced by the value of
+      the `--base-href` argument provided to `flutter build`.
+    -->
+    <base href="/">
+
+    <meta charset="UTF-8">
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+    <meta name="description" content="Ghosten Player">
+    <meta content="never" name="referrer">
+
+    <!-- iOS meta tags & icons -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta content="Ghosten Player" name="apple-mobile-web-app-title">
+    <link href="favicon.png" rel="apple-touch-icon">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png"/>
+
+    <title>Ghosten Player</title>
+    <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: light dark;
+        }
+
+        body {
+            text-align: center;
+            overflow-y: scroll;
+            background-image: url("/assets/assets/tv/images/bg-stripe.png");
+            background-attachment: fixed;
+            background-blend-mode: exclusion;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            min-width: 1400px;
+            min-height: 960px;
+            margin: 0;
+        }
+
+        .wrapper {
+            display: flex;
+            width: 1500px;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0 auto;
+        }
+
+        #container {
+            box-shadow: 0 30px 48px 10px #000;
+            background: #000;
+            margin: 0 auto;
+        }
+
+        .tv-frame {
+            border: 20px solid #1a1a1b;
+            display: inline-block;
+            position: relative;
+            border-radius: 4px;
+            perspective: 800px;
+        }
+
+        .tv-frame .frame {
+            width: 1120px;
+            height: 630px;
+        }
+
+        .tv-frame:before {
+            position: absolute;
+            content: ' ';
+            width: 30px;
+            height: 55px;
+            background-color: #1a1a1b;
+            left: 20%;
+            top: 100%;
+            margin-top: 1px;
+            transform: rotateX(68deg);
+            border-radius: 8px;
+        }
+
+        .tv-frame:after {
+            position: absolute;
+            content: ' ';
+            width: 30px;
+            height: 55px;
+            background-color: #1a1a1b;
+            right: 20%;
+            top: 100%;
+            margin-top: 1px;
+            transform: rotateX(68deg);
+            border-radius: 8px;
+        }
+
+        .pad-frame {
+            display: inline-block;
+            border: 26px solid #1a1a1b;
+            border-radius: 50px;
+            position: relative;
+        }
+
+        .frame {
+            border: 1px solid #000;
+            display: block;
+            overflow: hidden;
+            text-align: left;
+        }
+
+        .pad-frame .frame {
+
+            border-radius: 24px;
+            width: 1000px;
+            height: 700px;
+        }
+
+        .pad-frame:before {
+            position: absolute;
+            content: ' ';
+            width: 10px;
+            height: 10px;
+            background-color: #404042;
+            left: 50%;
+            top: -17px;
+            border-radius: 8px;
+            margin-left: -5px;
+        }
+
+        .phone-frame {
+            display: inline-block;
+            border: 14px solid #1a1a1b;
+            border-radius: 50px;
+            position: relative;
+        }
+
+        .phone-frame .frame {
+            width: 400px;
+            height: 843px;
+            border-radius: 36px;
+        }
+
+        .phone-frame:before {
+            position: absolute;
+            content: ' ';
+            width: 160px;
+            height: 23px;
+            background-color: #1a1a1b;
+            left: 50%;
+            top: 0;
+            border-radius: 0 0 18px 18px;
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+
+        .phone-frame:after {
+            position: absolute;
+            content: ' ';
+            width: 46px;
+            height: 5px;
+            background-color: #414142;
+            left: 50%;
+            top: 4px;
+            border-radius: 10px;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+        }
+
+        .switch_button {
+            padding: 10px 16px;
+            border: 0;
+            margin: 0;
+            display: inline-block;
+            background: #2a292f;
+            color: #fff;
+        }
+
+        .switch_button:hover {
+            background: #1a1a1a;
+        }
+
+        .switch_button:active {
+            background: #121214;
+        }
+
+        .switch_button.active, .switch_button.active:hover, .switch_button.active:active {
+            background: #000;
+        }
+    </style>
+    <style>
+        .sk-fading-circle {
+            margin: 260px auto 32px;
+            width: 32px;
+            height: 32px;
+            position: relative;
+        }
+
+        .sk-fading-circle .sk-circle {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .sk-fading-circle .sk-circle:before {
+            content: '';
+            display: block;
+            margin: 0 auto;
+            width: 15%;
+            height: 15%;
+            background-color: #fff;
+            border-radius: 100%;
+            -webkit-animation: sk-circleFadeDelay 1.2s infinite ease-in-out both;
+            animation: sk-circleFadeDelay 1.2s infinite ease-in-out both;
+        }
+        .sk-fading-circle .sk-circle2 {
+            -webkit-transform: rotate(30deg);
+            -ms-transform: rotate(30deg);
+            transform: rotate(30deg);
+        }
+        .sk-fading-circle .sk-circle3 {
+            -webkit-transform: rotate(60deg);
+            -ms-transform: rotate(60deg);
+            transform: rotate(60deg);
+        }
+        .sk-fading-circle .sk-circle4 {
+            -webkit-transform: rotate(90deg);
+            -ms-transform: rotate(90deg);
+            transform: rotate(90deg);
+        }
+        .sk-fading-circle .sk-circle5 {
+            -webkit-transform: rotate(120deg);
+            -ms-transform: rotate(120deg);
+            transform: rotate(120deg);
+        }
+        .sk-fading-circle .sk-circle6 {
+            -webkit-transform: rotate(150deg);
+            -ms-transform: rotate(150deg);
+            transform: rotate(150deg);
+        }
+        .sk-fading-circle .sk-circle7 {
+            -webkit-transform: rotate(180deg);
+            -ms-transform: rotate(180deg);
+            transform: rotate(180deg);
+        }
+        .sk-fading-circle .sk-circle8 {
+            -webkit-transform: rotate(210deg);
+            -ms-transform: rotate(210deg);
+            transform: rotate(210deg);
+        }
+        .sk-fading-circle .sk-circle9 {
+            -webkit-transform: rotate(240deg);
+            -ms-transform: rotate(240deg);
+            transform: rotate(240deg);
+        }
+        .sk-fading-circle .sk-circle10 {
+            -webkit-transform: rotate(270deg);
+            -ms-transform: rotate(270deg);
+            transform: rotate(270deg);
+        }
+        .sk-fading-circle .sk-circle11 {
+            -webkit-transform: rotate(300deg);
+            -ms-transform: rotate(300deg);
+            transform: rotate(300deg);
+        }
+        .sk-fading-circle .sk-circle12 {
+            -webkit-transform: rotate(330deg);
+            -ms-transform: rotate(330deg);
+            transform: rotate(330deg);
+        }
+        .sk-fading-circle .sk-circle2:before {
+            -webkit-animation-delay: -1.1s;
+            animation-delay: -1.1s;
+        }
+        .sk-fading-circle .sk-circle3:before {
+            -webkit-animation-delay: -1s;
+            animation-delay: -1s;
+        }
+        .sk-fading-circle .sk-circle4:before {
+            -webkit-animation-delay: -0.9s;
+            animation-delay: -0.9s;
+        }
+        .sk-fading-circle .sk-circle5:before {
+            -webkit-animation-delay: -0.8s;
+            animation-delay: -0.8s;
+        }
+        .sk-fading-circle .sk-circle6:before {
+            -webkit-animation-delay: -0.7s;
+            animation-delay: -0.7s;
+        }
+        .sk-fading-circle .sk-circle7:before {
+            -webkit-animation-delay: -0.6s;
+            animation-delay: -0.6s;
+        }
+        .sk-fading-circle .sk-circle8:before {
+            -webkit-animation-delay: -0.5s;
+            animation-delay: -0.5s;
+        }
+        .sk-fading-circle .sk-circle9:before {
+            -webkit-animation-delay: -0.4s;
+            animation-delay: -0.4s;
+        }
+        .sk-fading-circle .sk-circle10:before {
+            -webkit-animation-delay: -0.3s;
+            animation-delay: -0.3s;
+        }
+        .sk-fading-circle .sk-circle11:before {
+            -webkit-animation-delay: -0.2s;
+            animation-delay: -0.2s;
+        }
+        .sk-fading-circle .sk-circle12:before {
+            -webkit-animation-delay: -0.1s;
+            animation-delay: -0.1s;
+        }
+
+        @-webkit-keyframes sk-circleFadeDelay {
+            0%, 39%, 100% { opacity: 0; }
+            40% { opacity: 1; }
+        }
+
+        @keyframes sk-circleFadeDelay {
+            0%, 39%, 100% { opacity: 0; }
+            40% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <div>
+        <div class="btn-group">
+            <button type="button" class="btn btn-primary active switch_button">Phone</button>
+            <button type="button" class="btn btn-primary switch_button">Pad</button>
+            <button type="button" class="btn btn-primary switch_button">TV</button>
+        </div>
+        <div style="padding: 12px 24px;color: #fff">
+            内容仅作展示用，实际效果以真机为准
+        </div>
+    </div>
+    <div style="text-align: center;flex: 2;">
+        <div id="container" class="phone-frame">
+            <div class="frame">
+                <img src="favicon.png" style="margin: 300px auto 0;display: block;width: 100px">
+                <div class="sk-fading-circle">
+                    <div class="sk-circle1 sk-circle"></div>
+                    <div class="sk-circle2 sk-circle"></div>
+                    <div class="sk-circle3 sk-circle"></div>
+                    <div class="sk-circle4 sk-circle"></div>
+                    <div class="sk-circle5 sk-circle"></div>
+                    <div class="sk-circle6 sk-circle"></div>
+                    <div class="sk-circle7 sk-circle"></div>
+                    <div class="sk-circle8 sk-circle"></div>
+                    <div class="sk-circle9 sk-circle"></div>
+                    <div class="sk-circle10 sk-circle"></div>
+                    <div class="sk-circle11 sk-circle"></div>
+                    <div class="sk-circle12 sk-circle"></div>
+                </div>
+                <div style="text-align: center;
+    font-size: 24px;
+  font-family: 'PT Serif', serif;
+                font-weight: 700;
+color: #93CDE8">Ghosten Player</div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    (()=>{var L=()=>navigator.vendor==="Google Inc."||navigator.agent==="Edg/",E=()=>typeof ImageDecoder>"u"?!1:L(),P=()=>typeof Intl.v8BreakIterator<"u"&&typeof Intl.Segmenter<"u",W=()=>{let a=[0,97,115,109,1,0,0,0,1,5,1,95,1,120,0];return WebAssembly.validate(new Uint8Array(a))},w={hasImageCodecs:E(),hasChromiumBreakIterators:P(),supportsWasmGC:W(),crossOriginIsolated:window.crossOriginIsolated};function d(...a){return new URL(_(...a),document.baseURI).toString()}function _(...a){return a.filter(t=>!!t).map((t,i)=>i===0?S(t):j(S(t))).filter(t=>t.length).join("/")}function j(a){let t=0;for(;t<a.length&&a.charAt(t)==="/";)t++;return a.substring(t)}function S(a){let t=a.length;for(;t>0&&a.charAt(t-1)==="/";)t--;return a.substring(0,t)}function T(a,t){return a.canvasKitBaseUrl?a.canvasKitBaseUrl:t.engineRevision&&!t.useLocalCanvasKit?_("https://www.gstatic.com/flutter-canvaskit",t.engineRevision):"canvaskit"}var v=class{constructor(){this._scriptLoaded=!1}setTrustedTypesPolicy(t){this._ttPolicy=t}async loadEntrypoint(t){let{entrypointUrl:i=d("main.dart.js"),onEntrypointLoaded:r,nonce:e}=t||{};return this._loadJSEntrypoint(i,r,e)}async load(t,i,r,e,n){n??=o=>{o.initializeEngine(r).then(l=>l.runApp())};let{entryPointBaseUrl:s}=r;if(t.compileTarget==="dart2wasm")return this._loadWasmEntrypoint(t,i,s,n);{let o=t.mainJsPath??"main.dart.js",l=d(s,o);return this._loadJSEntrypoint(l,n,e)}}didCreateEngineInitializer(t){typeof this._didCreateEngineInitializerResolve=="function"&&(this._didCreateEngineInitializerResolve(t),this._didCreateEngineInitializerResolve=null,delete _flutter.loader.didCreateEngineInitializer),typeof this._onEntrypointLoaded=="function"&&this._onEntrypointLoaded(t)}_loadJSEntrypoint(t,i,r){let e=typeof i=="function";if(!this._scriptLoaded){this._scriptLoaded=!0;let n=this._createScriptTag(t,r);if(e)console.debug("Injecting <script> tag. Using callback."),this._onEntrypointLoaded=i,document.head.append(n);else return new Promise((s,o)=>{console.debug("Injecting <script> tag. Using Promises. Use the callback approach instead!"),this._didCreateEngineInitializerResolve=s,n.addEventListener("error",o),document.head.append(n)})}}async _loadWasmEntrypoint(t,i,r,e){if(!this._scriptLoaded){this._scriptLoaded=!0,this._onEntrypointLoaded=e;let{mainWasmPath:n,jsSupportRuntimePath:s}=t,o=d(r,n),l=d(r,s);this._ttPolicy!=null&&(l=this._ttPolicy.createScriptURL(l));let c=(await import(l)).compileStreaming(fetch(o)),f;t.renderer==="skwasm"?f=(async()=>{let m=await i.skwasm;return window._flutter_skwasmInstance=m,{skwasm:m.wasmExports,skwasmWrapper:m,ffi:{memory:m.wasmMemory}}})():f=Promise.resolve({}),await(await(await c).instantiate(await f)).invokeMain()}}_createScriptTag(t,i){let r=document.createElement("script");r.type="application/javascript",i&&(r.nonce=i);let e=t;return this._ttPolicy!=null&&(e=this._ttPolicy.createScriptURL(t)),r.src=e,r}};async function b(a,t,i){if(t<0)return a;let r,e=new Promise((n,s)=>{r=setTimeout(()=>{s(new Error(`${i} took more than ${t}ms to resolve. Moving on.`,{cause:b}))},t)});return Promise.race([a,e]).finally(()=>{clearTimeout(r)})}var y=class{setTrustedTypesPolicy(t){this._ttPolicy=t}loadServiceWorker(t){if(!t)return console.debug("Null serviceWorker configuration. Skipping."),Promise.resolve();if(!("serviceWorker"in navigator)){let o="Service Worker API unavailable.";return window.isSecureContext||(o+=`
+The current context is NOT secure.`,o+=`
+Read more: https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts`),Promise.reject(new Error(o))}let{serviceWorkerVersion:i,serviceWorkerUrl:r=d(`flutter_service_worker.js?v=${i}`),timeoutMillis:e=4e3}=t,n=r;this._ttPolicy!=null&&(n=this._ttPolicy.createScriptURL(n));let s=navigator.serviceWorker.register(n).then(o=>this._getNewServiceWorker(o,i)).then(this._waitForServiceWorkerActivation);return b(s,e,"prepareServiceWorker")}async _getNewServiceWorker(t,i){if(!t.active&&(t.installing||t.waiting))return console.debug("Installing/Activating first service worker."),t.installing||t.waiting;if(t.active.scriptURL.endsWith(i))return console.debug("Loading from existing service worker."),t.active;{let r=await t.update();return console.debug("Updating service worker."),r.installing||r.waiting||r.active}}async _waitForServiceWorkerActivation(t){if(!t||t.state==="activated")if(t){console.debug("Service worker already active.");return}else throw new Error("Cannot activate a null service worker!");return new Promise((i,r)=>{t.addEventListener("statechange",()=>{t.state==="activated"&&(console.debug("Activated new service worker."),i())})})}};var g=class{constructor(t,i="flutter-js"){let r=t||[/\.js$/,/\.mjs$/];window.trustedTypes&&(this.policy=trustedTypes.createPolicy(i,{createScriptURL:function(e){if(e.startsWith("blob:"))return e;let n=new URL(e,window.location),s=n.pathname.split("/").pop();if(r.some(l=>l.test(s)))return n.toString();console.error("URL rejected by TrustedTypes policy",i,":",e,"(download prevented)")}}))}};var k=a=>{let t=WebAssembly.compileStreaming(fetch(a));return(i,r)=>((async()=>{let e=await t,n=await WebAssembly.instantiate(e,i);r(n,e)})(),{})};var I=(a,t,i,r)=>(window.flutterCanvasKitLoaded=(async()=>{if(window.flutterCanvasKit)return window.flutterCanvasKit;let e=i.hasChromiumBreakIterators&&i.hasImageCodecs;if(!e&&t.canvasKitVariant=="chromium")throw"Chromium CanvasKit variant specifically requested, but unsupported in this browser";let n=e&&t.canvasKitVariant!=="full",s=r;n&&(s=d(s,"chromium"));let o=d(s,"canvaskit.js");a.flutterTT.policy&&(o=a.flutterTT.policy.createScriptURL(o));let l=k(d(s,"canvaskit.wasm")),p=await import(o);return window.flutterCanvasKit=await p.default({instantiateWasm:l}),window.flutterCanvasKit})(),window.flutterCanvasKitLoaded);var U=async(a,t,i,r)=>{let e=d(r,"skwasm.js"),n=e;a.flutterTT.policy&&(n=a.flutterTT.policy.createScriptURL(n));let s=k(d(r,"skwasm.wasm"));return await(await import(n)).default({instantiateWasm:s,locateFile:(l,p)=>{let c=p+l;return c.endsWith(".worker.js")?URL.createObjectURL(new Blob([`importScripts('${c}');`],{type:"application/javascript"})):c},mainScriptUrlOrBlob:e})};var C=class{async loadEntrypoint(t){let{serviceWorker:i,...r}=t||{},e=new g,n=new y;n.setTrustedTypesPolicy(e.policy),await n.loadServiceWorker(i).catch(o=>{console.warn("Exception while loading service worker:",o)});let s=new v;return s.setTrustedTypesPolicy(e.policy),this.didCreateEngineInitializer=s.didCreateEngineInitializer.bind(s),s.loadEntrypoint(r)}async load({serviceWorkerSettings:t,onEntrypointLoaded:i,nonce:r,config:e}={}){e??={};let n=_flutter.buildConfig;if(!n)throw"FlutterLoader.load requires _flutter.buildConfig to be set";let s=u=>{switch(u){case"skwasm":return w.crossOriginIsolated&&w.hasChromiumBreakIterators&&w.hasImageCodecs&&w.supportsWasmGC;default:return!0}},o=(u,m)=>{switch(u.renderer){case"auto":return m=="canvaskit"||m=="html";default:return u.renderer==m}},l=u=>u.compileTarget==="dart2wasm"&&!w.supportsWasmGC||e.renderer&&!o(u,e.renderer)?!1:s(u.renderer),p=n.builds.find(l);if(!p)throw"FlutterLoader could not find a build compatible with configuration and environment.";let c={};c.flutterTT=new g,t&&(c.serviceWorkerLoader=new y,c.serviceWorkerLoader.setTrustedTypesPolicy(c.flutterTT.policy),await c.serviceWorkerLoader.loadServiceWorker(t).catch(u=>{console.warn("Exception while loading service worker:",u)}));let f=T(e,n);p.renderer==="canvaskit"?c.canvasKit=I(c,e,w,f):p.renderer==="skwasm"&&(c.skwasm=U(c,e,w,f));let h=new v;return h.setTrustedTypesPolicy(c.flutterTT.policy),this.didCreateEngineInitializer=h.didCreateEngineInitializer.bind(h),h.load(p,c,e,r,i)}};window._flutter||(window._flutter={});window._flutter.loader||(window._flutter.loader=new C);})();
+//# sourceMappingURL=flutter.js.map
+
+    if (!window._flutter) {
+  window._flutter = {};
+}
+_flutter.buildConfig = {"engineRevision":"82bd5b7209295a5b7ff8cae0df96e7870171e3a5","builds":[{"compileTarget":"dart2wasm","renderer":"skwasm","mainWasmPath":"main.dart.wasm","jsSupportRuntimePath":"main.dart.mjs"},{"compileTarget":"dart2js","renderer":"canvaskit","mainJsPath":"main.dart.js"}]};
+
+
+    _flutter.loader.load({
+        onEntrypointLoaded: async function (engineInitializer) {
+            const engine = await engineInitializer.initializeEngine({
+                multiViewEnabled: true,
+            });
+            window.__app = await engine.runApp();
+            window.__viewId = __app.addView({
+                hostElement: document.querySelector('.frame'),
+                initialData: 0,
+            });
+        }
+    });
+    Array.from(document.querySelectorAll('.switch_button').entries())
+        .forEach(([index, el]) => el.addEventListener(
+            'click', (_) => {
+                Array.from(el.parentElement.children).forEach(el => el.classList.remove('active'));
+                el.classList.add('active');
+                switchMode(index)
+            }
+        ))
+
+    function switchMode(index) {
+        if (window.__app) {
+
+            const el = document.getElementById('container');
+            let className;
+            switch (index) {
+                case 0:
+                    className = 'phone-frame';
+                    break;
+                case 1:
+                    className = 'pad-frame';
+                    break;
+                case 2:
+                    className = 'tv-frame';
+                    break;
+            }
+            if (className && !el.classList.contains(className)) {
+                el.className = className;
+                if (window.__viewId) {
+                    window.__app.removeView(__viewId);
+                }
+                window.__viewId = __app.addView({
+                    hostElement: document.querySelector('.frame'),
+                    initialData: index,
+                });
+            }
+        }
+    }
+</script>
+</body>
+</html>
