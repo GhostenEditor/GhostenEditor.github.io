@@ -116758,7 +116758,9 @@ $1(a){return this.a},
 $S:737}
 A.bpA.prototype={
 $1(a){var s=A.uw(a).a,r=$.bJV().a.c.i(0,s)
-return new A.Cc(A.cQ(A.cP(r==null?null:r.initialData)),null)},
+r=r==null?null:r.initialData
+r.toString
+return new A.Cc(A.cQ(A.cP(r)),null)},
 $S:738}
 A.Lb.prototype={
 G(){return new A.afz(A.D(t.K,t.l7))}}
